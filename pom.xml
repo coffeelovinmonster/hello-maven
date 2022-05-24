@@ -77,6 +77,7 @@
           <artifactId>maven-war-plugin</artifactId>
           <version>3.3.2</version>
           <configuration>
+            <warSourceDirectory>src/main/webapp/dist</warSourceDirectory>
             <failOnMissingWebXml>false</failOnMissingWebXml>
           </configuration>
         </plugin>
@@ -134,7 +135,62 @@
           <workingDirectory>src/main/webapp</workingDirectory>
         </configuration>
       </plugin>
-    
+
+      <!-- Skaffold JIB plugin to support docker build in maven -->
+      <plugin>
+        <groupId>com.google.cloud.tools</groupId>
+        <artifactId>jib-maven-plugin</artifactId>
+        <version>3.2.1</version>
+        <configuration>
+          <from>
+            <image>tomcat</image>
+            <auth>
+              <username>this is my username</username>
+              <password>this is my password</password>
+            </auth>
+          </from>
+          <to>
+            <image>docker.io/my username/hello-maven:latest</image>
+            <auth>
+              <username>this is my username</username>
+              <password>this is my password</password>
+            </auth>
+          </to>
+          <container>
+            <ports>
+              <port>8080</port>
+            </ports>
+            <!--<entrypoint>
+              <arg>/bin/sh</arg>
+              <arg>-c</arg>
+              <arg>MV</arg>
+              <arg>/usr/local/tomcat/webapps.dist/*</arg>
+              <arg>/usr/local/tomcat/webapps</arg>
+            </entrypoint>-->
+          </container>
+          <extraDirectories>
+            <paths>
+              <path>
+                <from>tomcat-support</from>
+                <into>/usr/local/tomcat/webapps</into>
+              </path>
+              <path>
+                <from>src/main/webapp/dist</from>
+                <into>/usr/local/tomcat/webapps/ROOT</into>
+              </path>
+            </paths>
+          </extraDirectories>
+        </configuration>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>build</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
     </plugins>
 
   </build>

@@ -1,4 +1,4 @@
-FROM tomcat AS facny_cat
+FROM tomcat AS fancy_cat
 
 RUN mv /usr/local/tomcat/webapps.dist/* /usr/local/tomcat/webapps
 
