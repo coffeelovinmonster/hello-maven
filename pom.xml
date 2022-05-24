@@ -171,6 +171,7 @@
           <extraDirectories>
             <paths>
               <path>
+                <!-- This is a shim as Jib doesn't provide a docker runtime -->
                 <from>tomcat-support</from>
                 <into>/usr/local/tomcat/webapps</into>
               </path>
